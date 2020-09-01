@@ -1,0 +1,21 @@
+---
+# tasks file for configuring the Apache HTTPD web server 
+
+- name: install httpd software
+  package:
+    name: "httpd"
+    state: "present"
+  register: a
+
+- name: copy web file from github
+  get_url:
+    url: https://raw.githubusercontent.com/ManishVerma16/ansible_task_2/master/linux.html
+    dest: /var/www/html/index.html
+  when: a.failed == false
+  tags: gitclone
+  
+- name: Starting httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: yes
